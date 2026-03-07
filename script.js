@@ -71,17 +71,22 @@ function showError(id, msg) {
 
 // --- 4. EVENT LISTENERS ---
 
-// Merged Scroll Listener (Lebih efisien performa)
 window.addEventListener('scroll', () => {
     const scrollY = window.scrollY;
     
-    // Simpan posisi
+    // 1. Simpan posisi (Logika lama tetap dipertahankan)
     localStorage.setItem('userScrollPos', scrollY);
     
-    // Update UI Pixel Counter
-    document.getElementById('scroll-pixel-counter').innerText = `Scroll: ${Math.round(scrollY)} px`;
+    // 2. Logika Progress Bar Baru
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
     
-    // Toggle Scroll to Top Button
+    // Rumus Matematika Persentase:
+    // $$ \text{Scrolled} = \left( \frac{\text{winScroll}}{\text{height}} \right) \times 100 $$
+    const scrolled = (winScroll / height) * 100;
+    document.getElementById("myBar").style.width = scrolled + "%";
+    
+    // 3. Toggle Scroll to Top Button
     scrollBtn.style.display = scrollY > 300 ? 'block' : 'none';
 });
 
