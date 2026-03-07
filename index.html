@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page Pribadi Saya</title>
+    <meta name="description"
+        content="Portofolio Mahfud Waluyo: Seorang Vibe Coder yang menjembatani ilmu sosial dan teknologi melalui AI. Belajar melalui praktik nyata dengan filosofi build first, learn later.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./css/all.min.css">
+</head>
+
+<body>
+    <main class="container">
+
+        <button id="dark-mode-toggle" class="btn-toggle" aria-label="Ganti mode gelap/terang">
+            🌙 Mode Gelap
+        </button>
+
+        <button id="scroll-to-top" title="Ke Atas" aria-label="Kembali ke atas">↑</button>
+        <br>
+
+        <br>
+
+        <div id="scroll-pixel-counter">Scroll: 0 px</div>
+
+        <header>
+            <h1>Mahfud Waluyo</h1>
+            <h2 id="greeting-text" style="color: #0984e3;"></h2>
+            <p class="tagline">Vibe Coder | AI Enthusiast | Lifelong Learner</p>
+
+            <p><em>"Membangun masa depan melalui kreativitas dan kode."</em></p>
+            <br>
+
+        </header>
+        <br>
+        <hr>
+        <section class="reveal">
+            <img class="profile-img" src="./assets/profile.jpeg" alt="Foto Profil [Mahfud Waluyo]" width="150"
+                height="150" loading="eager">
+        </section>
+
+        <section class="reveal">
+            <h3>Tentang Saya</h3>
+            <p>
+                Halo! Saya seorang pembelajar seumur hidup yang passionate tentang <strong>teknologi dan AI</strong>.
+                Meskipun berlatar belakang ilmu sosial dan humaniora, saya percaya bahwa siapa pun
+                bisa belajar coding dan menggunakan teknologi untuk mewujudkan ide-ide mereka.
+            </p>
+            <p>
+                Saat ini saya sedang dalam perjalanan untuk menjadi seorang <strong>"vibe coder" -</strong> <a
+                    href="https://www.google.com/" target="_blank">Pelajari lebih lanjut tentang filosofi Vibe Coder</a>
+                - seseorang
+                yang mungkin tidak punya gelar CS, tapi bisa memanfaatkan AI tools seperti <i>Claude</i> dan
+                <i>Gemini</i> serta <i>LLM</i> lainnya untuk membangun aplikasi yang bermanfaat. Saya percaya bahwa
+                coding
+                bukan hanya
+                untuk engineer, tapi untuk siapa saja yang punya ide dan kemauan untuk belajar.
+            </p>
+            <p>
+                Filosofi saya sederhana: <i>build first, learn later</i>. Langsung praktik, baru kemudian
+                memahami teorinya. Dengan pendekatan ini, belajar coding jadi lebih menyenangkan dan
+                tidak terasa seperti beban!
+            </p>
+        </section>
+
+        <hr>
+
+        <section class="reveal">
+            <h3>Keahlian & Minat</h3>
+            <ul>
+                <li>Pengembangan Web (HTML, CSS, JavaScript)</li>
+                <li>Basic Frontend Development (Vite, React, CLI Bash)</li>
+                <li>Analisis Data Dasar</li>
+                <li>Learning Through Building</li>
+                <li>Tech for Non-Engineers</li>
+            </ul>
+        </section>
+
+        <hr>
+
+        <section class="reveal">
+            <h3>Hobi</h3>
+            <ol>
+                <li>Mendengarkan Radio atau musik</li>
+                <li>Berinteraksi dengan AI Chatbot</li>
+                <li>Membaca Buku</li>
+            </ol>
+        </section>
+
+        <hr>
+
+        <section id="projects" class="reveal">
+            <h3>Proyek Saya</h3>
+            <div class="project-container">
+                <div class="project-card">
+                    <h4>Personal AI Chatbot</h4>
+                    <p>Membangun chatbot sederhana menggunakan Gemini API untuk teman belajar.</p>
+                </div>
+                <div class="project-card">
+                    <h4>Vibe Coder Blog</h4>
+                    <p>Website blog pribadi untuk sharing perjalanan belajar coding dari nol.</p>
+                </div>
+                <div class="project-card">
+                    <h4>E-Library Mini</h4>
+                    <p>Aplikasi katalog buku digital sederhana dengan fitur pencarian.</p>
+                </div>
+            </div>
+        </section>
+
+        <hr>
+        <section class="reveal">
+            <h3>Hubungi Saya</h3>
+            <form id="contact-form">
+                <div class="form-group">
+                    <label for="name">Nama:</label>
+                    <input type="text" id="name" placeholder="Nama minimal 3 karakter" required>
+                    <small class="error-msg" id="name-error"></small>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" placeholder="contoh@mail.com" required>
+                    <small class="error-msg" id="email-error" aria-live="polite"></small>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Pesan:</label>
+                    <textarea id="message" rows="4" placeholder="Tulis pesanmu di sini..." required></textarea>
+                    <small class="error-msg" id="message-error" aria-live="polite"></small>
+                </div>
+
+                <button type="submit" class="btn-send">Kirim Pesan</button>
+            </form>
+            <div id="success-msg" style="display: none; color: #2ecc71; margin-top: 15px; font-weight: bold;">
+                ✅ Pesan berhasil terkirim (simulasi)!
+            </div>
+        </section>
+
+        <br />
+        <div class="stats-container">
+            <p id="visit-counter">Ini kunjungan ke-1 Anda</p>
+            <button id="clear-data-btn" class="btn-small">🗑️ Hapus Semua Data</button>
+        </div>
+        <br />
+        <hr>
+
+        <footer class="social-links">
+            <p>Mari terhubung:</p>
+            <div>
+                <a href="https://instagram.com/username Anda" target="_blank">
+                    <i class="fab fa-instagram"></i> Instagram
+                </a>
+                <a href="https://twitter.com/username Anda" target="_blank">
+                    <i class="fab fa-x-twitter"></i> Twitter
+                </a>
+                <a href="https://linkedin.com/in/username Anda" target="_blank">
+                    <i class="fab fa-linkedin-in"></i> LinkedIn
+                </a>
+            </div>
+            <p>&copy; 2026 [Nama Anda]. Dibuat dengan semangat.</p>
+        </footer>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
