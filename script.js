@@ -100,30 +100,58 @@ darkModeToggle.addEventListener('click', () => {
     console.log(`[Log] Theme changed to: ${theme}`);
 });
 
-// Form Submit & Validation
-contactForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    const data = {
-        name: nameInput.value,
-        email: document.getElementById('email').value,
-        message: document.getElementById('message').value
-    };
+// --- Form Submit & Validation (Refactored for Formspree AJAX) ---
+contactForm.addEventListener('submit', async (e) => {
+    e.preventDefault(); // Menghentikan reload halaman
 
-    // Reset UI
+    // 1. Ambil Data
+    const form = e.target;
+    const data = new FormData(form);
+    const successEl = document.getElementById('success-msg');
+    const submitBtn = form.querySelector('.btn-send');
+
+    // 2. Reset UI Error
     document.querySelectorAll('.error-msg').forEach(el => el.style.display = 'none');
-    
-    // Validation
-    let isValid = true;
-    if (data.name.length < 3) { showError('name-error', 'Minimal 3 karakter!'); isValid = false; }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) { showError('email-error', 'Email tidak valid!'); isValid = false; }
-    if (!data.message.trim()) { showError('message-error', 'Pesan kosong!'); isValid = false; }
+    successEl.style.display = 'none';
 
-    if (isValid) {
-        const successEl = document.getElementById('success-msg');
-        successEl.textContent = `✅ Terima kasih, ${data.name}!`;
-        successEl.style.display = 'block';
-        contactForm.reset();
+    // 3. Validasi Lokal
+    let isValid = true;
+    if (nameInput.value.length < 3) { showError('name-error', 'Minimal 3 karakter!'); isValid = false; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(document.getElementById('email').value)) { showError('email-error', 'Email tidak valid!'); isValid = false; }
+    if (!document.getElementById('message').value.trim()) { showError('message-error', 'Pesan kosong!'); isValid = false; }
+
+    if (!isValid) return; // Berhenti jika tidak valid
+
+    // 4. Proses Pengiriman (AJAX/Fetch)
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sedang Mengirim...';
+
+    try {
+        const response = await fetch(form.action, {
+            method: form.method,
+            body: data,
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            // Berhasil!
+            successEl.textContent = `✅ Terima kasih, ${nameInput.value}! Pesan Anda telah terkirim.`;
+            successEl.style.display = 'block';
+            successEl.style.color = '#2ecc71';
+            form.reset(); // Kosongkan form
+        } else {
+            // Gagal dari sisi server
+            const errorData = await response.json();
+            showError('message-error', 'Ups! Ada masalah saat mengirim: ' + errorData.errors[0].message);
+        }
+    } catch (error) {
+        // Gagal koneksi
+        showError('message-error', 'Koneksi bermasalah. Silakan coba lagi nanti.');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Kirim Pesan';
     }
 });
 
