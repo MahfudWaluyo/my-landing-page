@@ -162,7 +162,7 @@ a:hover {
   transform: translateY(-3px); /* Efek melayang saat di-hover */
 }
 
-/* Warna untuk Dark Mode */
+/* Warna untuk Mode Gelap */
 body.dark-mode {
   background-color: #1a1a1a;
   color: #f5f6fa;
@@ -223,7 +223,7 @@ body.dark-mode .container {
 
 #scroll-pixel-counter {
   position: fixed;
-  top: 60px; /* Di bawah tombol dark mode */
+  top: 60px; /* Di bawah tombol mode gelap */
   right: 20px;
   background: rgba(0, 0, 0, 0.7);
   color: white;
@@ -322,7 +322,7 @@ textarea:focus {
   outline-offset: 2px;
 }
 
-/* Memastikan kontras warna cukup di Dark Mode */
+/* Memastikan kontras warna cukup di Mode gelap */
 body.dark-mode .tagline {
   color: #bdc3c7;
 }
