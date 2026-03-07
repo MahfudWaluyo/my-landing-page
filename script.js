@@ -33,7 +33,7 @@ function restoreTheme() {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
         body.classList.add('dark-mode');
-        darkModeToggle.textContent = '☀️ Mode Terang';
+        darkModeToggle.textContent = '☀️ Light Mode';
     }
 }
 
@@ -90,7 +90,7 @@ darkModeToggle.addEventListener('click', () => {
     const isDark = body.classList.toggle('dark-mode');
     const theme = isDark ? 'dark' : 'light';
     
-    darkModeToggle.textContent = isDark ? '☀️ Mode Terang' : '🌙 Mode Gelap';
+    darkModeToggle.textContent = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
     localStorage.setItem('theme', theme);
     console.log(`[Log] Theme changed to: ${theme}`);
 });
