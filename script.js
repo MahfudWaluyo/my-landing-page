@@ -202,3 +202,26 @@ new Typed('#typed', {
       profileImg.classList.remove('spin');
     }, 300);
   });
+
+  const cursor = document.getElementById('custom-cursor');
+
+  // 1. Gerakkan kursor mengikuti mouse
+  window.addEventListener('mousemove', (e) => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+  });
+  
+  // 2. Efek saat menyentuh link/tombol
+  const interactiveElements = document.querySelectorAll('a, button, .project-card, input, textarea');
+  
+  interactiveElements.forEach(el => {
+      el.addEventListener('mouseenter', () => {
+          cursor.classList.add('active');
+          cursor.innerHTML = '🤖'; // Ikon AI muncul saat hover
+      });
+      
+      el.addEventListener('mouseleave', () => {
+          cursor.classList.remove('active');
+          cursor.innerHTML = ''; // Hapus ikon saat keluar
+      });
+  });
