@@ -9,6 +9,7 @@
         content="Portofolio Mahfud Waluyo: Seorang Vibe Coder yang menjembatani ilmu sosial dan teknologi melalui AI. Belajar melalui praktik nyata dengan filosofi build first, learn later.">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="./css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 
 <body>
@@ -30,7 +31,7 @@
         <header>
             <h1>Mahfud Waluyo</h1>
             <h2 id="greeting-text" style="color: #0984e3;"></h2>
-            <p class="tagline">Vibe Coder | AI Enthusiast | Lifelong Learner</p>
+            <p class="tagline"><span id="typed"></span></p>
 
             <p><em>"Membangun masa depan melalui kreativitas dan kode."</em></p>
             <br>
@@ -43,7 +44,7 @@
                 height="150" loading="eager">
         </section>
 
-        <section class="reveal">
+        <section class="reveal" data-aos="fade-up" data-aos-duration="1000">
             <h3>Tentang Saya</h3>
             <p>
                 Halo! Saya seorang pembelajar seumur hidup yang passionate tentang <strong>teknologi dan AI</strong>.
@@ -93,18 +94,18 @@
 
         <hr>
 
-        <section id="projects" class="reveal">
+        <section id="projects" class="reveal" data-aos="fade-up" data-aos-delay="200">
             <h3>Proyek Saya</h3>
             <div class="project-container">
-                <div class="project-card">
+                <div class="project-card" data-aos="zoom-in" data-aos-delay="300">
                     <h4>Personal AI Chatbot</h4>
                     <p>Membangun chatbot sederhana menggunakan Gemini API untuk teman belajar.</p>
                 </div>
-                <div class="project-card">
+                <div class="project-card" data-aos="zoom-in" data-aos-delay="500">
                     <h4>Vibe Coder Blog</h4>
                     <p>Website blog pribadi untuk sharing perjalanan belajar coding dari nol.</p>
                 </div>
-                <div class="project-card">
+                <div class="project-card" data-aos="zoom-in" data-aos-delay="700">
                     <h4>E-Library Mini</h4>
                     <p>Aplikasi katalog buku digital sederhana dengan fitur pencarian.</p>
                 </div>
@@ -166,6 +167,8 @@
         </footer>
     </main>
 
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
     <script src="script.js"></script>
 </body>
 

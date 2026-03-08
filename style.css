@@ -333,6 +333,10 @@ body.dark-mode .tagline {
   transition: width 0.1s ease;
 }
 
+.profile-img.spin {
+  transform: rotate(360deg);
+}
+
 /* Mode Gelap untuk Progress Bar */
 body.dark-mode .progress-container {
   background: rgba(255, 255, 255, 0.1);

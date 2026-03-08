@@ -24,7 +24,12 @@ function initApp() {
     updateGreeting();
     handleVisitCounter();
     restoreSavedName();
-    initIntersectionObserver();
+
+    // Tambahkan ini:
+    AOS.init({
+        once: true, // Animasi hanya berjalan sekali saat scroll ke bawah
+        offset: 120, // Jarak (px) elemen dari bawah layar sebelum animasi mulai
+    });
 }
 
 // --- 3. HELPER FUNCTIONS (Logika terpisah) ---
@@ -174,12 +179,26 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Intersection Observer (Fade-in)
-function initIntersectionObserver() {
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) entry.target.classList.add('active');
-        });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-}
+// Konfigurasi Typing Effect
+new Typed('#typed', {
+    strings: [
+      'Vibe Coder', 
+      'AI Enthusiast', 
+      'Lifelong Learner',
+      'Building through AI Tools'
+    ],
+    typeSpeed: 50,    // Kecepatan mengetik
+    backSpeed: 30,    // Kecepatan menghapus
+    loop: true,       // Mengulang terus menerus
+    backDelay: 2000   // Jeda sebelum menghapus teks
+  });
+
+  const profileImg = document.querySelector('.profile-img');
+
+  profileImg.addEventListener('click', () => {
+    profileImg.classList.add('spin');
+    // Hapus class setelah 0.3s agar bisa diklik lagi
+    setTimeout(() => {
+      profileImg.classList.remove('spin');
+    }, 300);
+  });
