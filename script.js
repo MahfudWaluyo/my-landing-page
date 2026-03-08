@@ -1,227 +1,191 @@
 /**
- * LANDING PAGE SCRIPT - REFACTORED VERSION
- * Struktur: Global Vars -> Init -> Helpers -> Events
+ * LANDING PAGE SCRIPT - MODULAR VERSION
+ * Author: Mahfud Waluyo (Vibe Coder)
+ * Strategi: Inisialisasi -> Fitur UX -> Fitur Data -> Form & Interaksi
  */
 
-// --- 1. CONFIGURATION & DOM ELEMENTS ---
-const body = document.body;
-const darkModeToggle = document.getElementById('dark-mode-toggle');
-const scrollBtn = document.getElementById('scroll-to-top');
-const contactForm = document.getElementById('contact-form');
-const nameInput = document.getElementById('name');
+// --- 1. DOM ELEMENTS ---
+const elements = {
+    body: document.body,
+    darkModeToggle: document.getElementById('dark-mode-toggle'),
+    scrollBtn: document.getElementById('scroll-to-top'),
+    contactForm: document.getElementById('contact-form'),
+    nameInput: document.getElementById('name'),
+    progressBar: document.getElementById("myBar"),
+    visitDisplay: document.getElementById('visit-counter'),
+    greeting: document.getElementById('greeting-text'),
+    cursor: document.getElementById('custom-cursor'),
+    profileImg: document.querySelector('.profile-img')
+};
 
-// Konfigurasi Scroll Restoration
-if ('history' in window && 'scrollRestoration' in window.history) {
-    window.history.scrollRestoration = 'manual';
-}
+// --- 2. INITIALIZATION ---
+document.addEventListener('DOMContentLoaded', () => {
+    // Jalankan semua fitur utama
+    setupTheme();
+    setupScrollFeatures();
+    setupPersonalization();
+    setupAnimations();
+    setupInteractions();
+    setupContactForm();
+});
 
-// --- 2. INITIALIZATION (Jalan saat script dimuat) ---
-initApp();
+// --- 3. FITUR: THEME (Dark/Light Mode) ---
+function setupTheme() {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        elements.body.classList.add('dark-mode');
+        elements.darkModeToggle.textContent = '☀️ Light Mode';
+    }
 
-function initApp() {
-    restoreTheme();
-    restoreScroll();
-    updateGreeting();
-    handleVisitCounter();
-    restoreSavedName();
-
-    // Tambahkan ini:
-    AOS.init({
-        once: true, // Animasi hanya berjalan sekali saat scroll ke bawah
-        offset: 120, // Jarak (px) elemen dari bawah layar sebelum animasi mulai
+    elements.darkModeToggle.addEventListener('click', () => {
+        const isDark = elements.body.classList.toggle('dark-mode');
+        const theme = isDark ? 'dark' : 'light';
+        elements.darkModeToggle.textContent = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
+        localStorage.setItem('theme', theme);
     });
 }
 
-// --- 3. HELPER FUNCTIONS (Logika terpisah) ---
+// --- 4. FITUR: SCROLL (Progress Bar, To Top, Position) ---
+function setupScrollFeatures() {
+    // Recovery posisi scroll lama
+    const savedPos = localStorage.getItem('userScrollPos');
+    if (savedPos) window.scrollTo(0, parseInt(savedPos));
 
-function restoreTheme() {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-        body.classList.add('dark-mode');
-        darkModeToggle.textContent = '☀️ Light Mode';
-    }
+    window.addEventListener('scroll', () => {
+        const scrollY = window.scrollY;
+        
+        // Simpan posisi
+        localStorage.setItem('userScrollPos', scrollY);
+        
+        // Update Progress Bar
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        
+        if (elements.progressBar) {
+            elements.progressBar.style.width = scrolled + "%";
+        }
+        
+        // Toggle Scroll to Top Button
+        elements.scrollBtn.style.display = scrollY > 300 ? 'block' : 'none';
+    });
+
+    // Smooth scroll untuk link internal
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.querySelector(anchor.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+        });
+    });
 }
 
-function restoreScroll() {
-    const pos = localStorage.getItem('userScrollPos');
-    if (pos) {
-        window.scrollTo(0, parseInt(pos));
-        requestAnimationFrame(() => window.scrollTo(0, parseInt(pos)));
-    }
-}
+// --- 5. FITUR: PERSONALIZATION (Greeting, Counter, Name) ---
+function setupPersonalization() {
+    // Greeting berdasarkan waktu
+    const hour = new Date().getHours();
+    const msg = hour < 11 ? "Pagi 🌅" : hour < 15 ? "Siang ☀️" : hour < 18 ? "Sore 🌤️" : "Malam 🌙";
+    if (elements.greeting) elements.greeting.innerText = `Selamat ${msg}, Vibe Coder!`;
 
-function handleVisitCounter() {
+    // Visit Counter
     let visits = parseInt(localStorage.getItem('visitCount') || 0) + 1;
     localStorage.setItem('visitCount', visits);
-    document.getElementById('visit-counter').innerText = `Ini kunjungan ke-${visits} Anda`;
-}
+    if (elements.visitDisplay) elements.visitDisplay.innerText = `Ini kunjungan ke-${visits} Anda`;
 
-function restoreSavedName() {
+    // Autosave & Restore Name
     const savedName = localStorage.getItem('userName');
-    if (savedName) nameInput.value = savedName;
+    if (savedName) elements.nameInput.value = savedName;
+    elements.nameInput.addEventListener('input', (e) => localStorage.setItem('userName', e.target.value));
+
+    // Clear Data Button
+    document.getElementById('clear-data-btn').addEventListener('click', () => {
+        if (confirm("Hapus semua data browser untuk situs ini?")) {
+            localStorage.clear();
+            location.reload();
+        }
+    });
 }
 
-function updateGreeting() {
-    const greetingElement = document.getElementById('greeting-text');
-    const hour = new Date().getHours();
-    let msg = hour < 11 ? "Pagi 🌅" : hour < 15 ? "Siang ☀️" : hour < 18 ? "Sore 🌤️" : "Malam 🌙";
-    greetingElement.innerText = `Selamat ${msg}, Vibe Coder!`;
+// --- 6. FITUR: ANIMATIONS (AOS & Typed.js) ---
+function setupAnimations() {
+    // Inisialisasi AOS
+    AOS.init({ once: true, offset: 120 });
+
+    // Inisialisasi Typed.js
+    new Typed('#typed', {
+        strings: ['Vibe Coder', 'AI Enthusiast', 'Lifelong Learner', 'Building through AI Tools'],
+        typeSpeed: 50,
+        backSpeed: 30,
+        loop: true,
+        backDelay: 2000
+    });
+}
+
+// --- 7. FITUR: INTERACTIONS (Cursor & Spin) ---
+function setupInteractions() {
+    // Custom Cursor
+    window.addEventListener('mousemove', (e) => {
+        elements.cursor.style.left = e.clientX + 'px';
+        elements.cursor.style.top = e.clientY + 'px';
+    });
+
+    const interactiveTags = 'a, button, .project-card, input, textarea';
+    document.querySelectorAll(interactiveTags).forEach(el => {
+        el.addEventListener('mouseenter', () => {
+            elements.cursor.classList.add('active');
+            elements.cursor.innerHTML = '🤖';
+        });
+        el.addEventListener('mouseleave', () => {
+            elements.cursor.classList.remove('active');
+            elements.cursor.innerHTML = '';
+        });
+    });
+
+    // Profile Spin Easter Egg
+    elements.profileImg.addEventListener('click', () => {
+        elements.profileImg.classList.add('spin');
+        setTimeout(() => elements.profileImg.classList.remove('spin'), 300);
+    });
+}
+
+// --- 8. FITUR: CONTACT FORM (Formspree AJAX) ---
+function setupContactForm() {
+    elements.contactForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const submitBtn = form.querySelector('.btn-send');
+        const successEl = document.getElementById('success-msg');
+
+        // Reset UI
+        document.querySelectorAll('.error-msg').forEach(el => el.style.display = 'none');
+        
+        // Validasi Sederhana
+        if (elements.nameInput.value.length < 3) return showError('name-error', 'Minimal 3 karakter!');
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sedang Mengirim...';
+
+        try {
+            const response = await fetch(form.action, {
+                method: form.method,
+                body: new FormData(form),
+                headers: { 'Accept': 'application/json' }
+            });
+
+            if (response.ok) {
+                successEl.style.display = 'block';
+                form.reset();
+            }
+        } catch (err) {
+            alert("Maaf, terjadi kesalahan koneksi.");
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Kirim Pesan';
+        }
+    });
 }
 
 function showError(id, msg) {
     const el = document.getElementById(id);
-    el.textContent = msg; // Secure from XSS
+    el.textContent = msg;
     el.style.display = 'block';
 }
-
-// --- 4. EVENT LISTENERS ---
-
-window.addEventListener('scroll', () => {
-    const scrollY = window.scrollY;
-    
-    // 1. Simpan posisi (Logika lama tetap dipertahankan)
-    localStorage.setItem('userScrollPos', scrollY);
-    
-    // 2. Logika Progress Bar Baru
-    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    
-    // Rumus Matematika Persentase:
-    // $$ \text{Scrolled} = \left( \frac{\text{winScroll}}{\text{height}} \right) \times 100 $$
-    const scrolled = (winScroll / height) * 100;
-    document.getElementById("myBar").style.width = scrolled + "%";
-    
-    // 3. Toggle Scroll to Top Button
-    scrollBtn.style.display = scrollY > 300 ? 'block' : 'none';
-});
-
-// Dark Mode Toggle
-darkModeToggle.addEventListener('click', () => {
-    const isDark = body.classList.toggle('dark-mode');
-    const theme = isDark ? 'dark' : 'light';
-    
-    darkModeToggle.textContent = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
-    localStorage.setItem('theme', theme);
-    console.log(`[Log] Theme changed to: ${theme}`);
-});
-
-// --- Form Submit & Validation (Refactored for Formspree AJAX) ---
-contactForm.addEventListener('submit', async (e) => {
-    e.preventDefault(); // Menghentikan reload halaman
-
-    // 1. Ambil Data
-    const form = e.target;
-    const data = new FormData(form);
-    const successEl = document.getElementById('success-msg');
-    const submitBtn = form.querySelector('.btn-send');
-
-    // 2. Reset UI Error
-    document.querySelectorAll('.error-msg').forEach(el => el.style.display = 'none');
-    successEl.style.display = 'none';
-
-    // 3. Validasi Lokal
-    let isValid = true;
-    if (nameInput.value.length < 3) { showError('name-error', 'Minimal 3 karakter!'); isValid = false; }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(document.getElementById('email').value)) { showError('email-error', 'Email tidak valid!'); isValid = false; }
-    if (!document.getElementById('message').value.trim()) { showError('message-error', 'Pesan kosong!'); isValid = false; }
-
-    if (!isValid) return; // Berhenti jika tidak valid
-
-    // 4. Proses Pengiriman (AJAX/Fetch)
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Sedang Mengirim...';
-
-    try {
-        const response = await fetch(form.action, {
-            method: form.method,
-            body: data,
-            headers: {
-                'Accept': 'application/json'
-            }
-        });
-
-        if (response.ok) {
-            // Berhasil!
-            successEl.textContent = `✅ Terima kasih, ${nameInput.value}! Pesan Anda telah terkirim.`;
-            successEl.style.display = 'block';
-            successEl.style.color = '#2ecc71';
-            form.reset(); // Kosongkan form
-        } else {
-            // Gagal dari sisi server
-            const errorData = await response.json();
-            showError('message-error', 'Ups! Ada masalah saat mengirim: ' + errorData.errors[0].message);
-        }
-    } catch (error) {
-        // Gagal koneksi
-        showError('message-error', 'Koneksi bermasalah. Silakan coba lagi nanti.');
-    } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Kirim Pesan';
-    }
-});
-
-// Autosave name
-nameInput.addEventListener('input', (e) => localStorage.setItem('userName', e.target.value));
-
-// Clear Data
-document.getElementById('clear-data-btn').addEventListener('click', () => {
-    if (confirm("Hapus semua data?")) {
-        localStorage.clear();
-        location.reload();
-    }
-});
-
-// Smooth Scroll Nav
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', (e) => {
-        e.preventDefault();
-        document.querySelector(anchor.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
-    });
-});
-
-// Konfigurasi Typing Effect
-new Typed('#typed', {
-    strings: [
-      'Vibe Coder', 
-      'AI Enthusiast', 
-      'Lifelong Learner',
-      'Building through AI Tools'
-    ],
-    typeSpeed: 50,    // Kecepatan mengetik
-    backSpeed: 30,    // Kecepatan menghapus
-    loop: true,       // Mengulang terus menerus
-    backDelay: 2000   // Jeda sebelum menghapus teks
-  });
-
-  const profileImg = document.querySelector('.profile-img');
-
-  profileImg.addEventListener('click', () => {
-    profileImg.classList.add('spin');
-    // Hapus class setelah 0.3s agar bisa diklik lagi
-    setTimeout(() => {
-      profileImg.classList.remove('spin');
-    }, 300);
-  });
-
-  const cursor = document.getElementById('custom-cursor');
-
-  // 1. Gerakkan kursor mengikuti mouse
-  window.addEventListener('mousemove', (e) => {
-      cursor.style.left = e.clientX + 'px';
-      cursor.style.top = e.clientY + 'px';
-  });
-  
-  // 2. Efek saat menyentuh link/tombol
-  const interactiveElements = document.querySelectorAll('a, button, .project-card, input, textarea');
-  
-  interactiveElements.forEach(el => {
-      el.addEventListener('mouseenter', () => {
-          cursor.classList.add('active');
-          cursor.innerHTML = '🤖'; // Ikon AI muncul saat hover
-      });
-      
-      el.addEventListener('mouseleave', () => {
-          cursor.classList.remove('active');
-          cursor.innerHTML = ''; // Hapus ikon saat keluar
-      });
-  });
