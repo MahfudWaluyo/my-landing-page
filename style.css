@@ -32,7 +32,7 @@ body {
   font-family: "Poppins", sans-serif;
   background-color: #f5f6fa;
   color: #2d3436;
-  cursor: none;
+  cursor: pointer;
   line-height: 1.6;
   display: flex;
   justify-content: center;
@@ -375,7 +375,7 @@ body.dark-mode .progress-container {
 a,
 button,
 .project-card {
-  cursor: none;
+  cursor: pointer;
 }
 
 /* Responsif untuk HP */
